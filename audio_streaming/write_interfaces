@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "arg1 $1, arg2 $2"
+
+echo 'auto lo' > /etc/network/interfaces.wifi
+echo '1'
+
+echo 'iface lo inet loopback' >> /etc/network/interfaces.wifi
+echo '2'
+
+echo 'iface eth0 inet dhcp' >> /etc/network/interfaces.wifi
+echo '3'
+
+echo 'allow-hotplug wlan0' >> /etc/network/interfaces.wifi
+echo '4'
+
+echo 'iface wlan0 inet dhcp' >> /etc/network/interfaces.wifi
+echo '4.5'
+
+echo "  wpa-ssid \"$1\"" >> /etc/network/interfaces.wifi
+echo '5'
+
+echo "  wpa-psk \"$2\"" >> /etc/network/interfaces.wifi
+echo '6'
+
+cp /etc/network/interfaces.wifi /etc/network/interfaces
+
+ifdown wlan0
+sleep 1
+
+ifup wlan0
+
+exit 0

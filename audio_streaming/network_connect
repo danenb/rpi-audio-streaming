@@ -1,0 +1,23 @@
+#!/bin/bash
+_IP=$(hostname -I) || true
+echo $_IP
+if [ ! $_IP]
+  then
+  cp /etc/network/interfaces.wifi /etc/network/interfaces
+  ifdown wlan0
+  sleep 1
+  ifup wlan0
+  sleep 2
+
+  _IP2=$(hostname -I) || true
+  echo $_IP2
+  if [ ! $_IP2]
+    then
+    ifdown wlan0
+    sleep 2
+    cp /etc/network/interfaces.hotspot /etc/network/interfaces
+    service hostapd restart &
+  fi
+fi
+
+exit 0

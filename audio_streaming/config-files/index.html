@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>Wireless Network Connection</title>
+<style type="text/css">
+#main
+{
+width:280px;
+margin-left:auto;
+margin-right:auto;
+padding:20px 60px 50px 60px;
+border:1px solid #888888;
+border-radius:15px;
+box-shadow: -10px 10px 10px #888888;
+
+background: -moz-linear-gradient(top,  rgba(178,225,255,0.4) 0%, rgba(102,182,252,0.55) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(178,225,255,0.4)), color-stop(100%,rgba(102,182,252,0.55))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(178,225,255,0.4) 0%,rgba(102,182,252,0.55) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(178,225,255,0.4) 0%,rgba(102,182,252,0.55) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(178,225,255,0.4) 0%,rgba(102,182,252,0.55) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(178,225,255,0.4) 0%,rgba(102,182,252,0.55) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66b2e1ff', endColorstr='#8c66b6fc',GradientType=0 ); /* IE6-9 */
+
+}
+
+#tab
+{
+text-align:center;
+}
+
+.label
+{
+text-align:left;
+}
+
+
+</style>
+</head>
+
+<body>
+<div id="main">
+	<br/><br/>
+	<h3>Connect to Wireless Network:</h3>
+	<form action="run_script.php" method="GET">
+		<table id="tab">
+			<tr>
+				<td class="label">Network Name: </td>
+				<td><input type="text" name="ssid" ></td>
+			</tr>
+			<tr>
+				<td class="label">Password: </td>
+				<td><input type="text" name="psk" ></td>
+			</tr>
+			<tr>
+				<td colspan="2"><br/><input type="submit" value="Connect"></td>
+			</tr>
+		</table>
+	</form>
+
+</div>
+</body>
+</html>

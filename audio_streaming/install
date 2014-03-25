@@ -1,0 +1,94 @@
+#!/bin/bash
+
+clear
+
+echo "======== Setting up audio streaming utilities ========="
+echo " "
+
+read -r -p "This script will make permanent changes to your system. Do you wish to continue? [y/N] " confirm
+
+if [[ $confirm =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+    clear
+	echo "This may take several minutes. Please ensure that internet connectivity is not interrupted during the installation and configuration process."
+	echo " "
+	
+    echo "Updating package manager"
+    
+    apt-get -y -qq update
+	
+	#Install dependencies
+	
+	echo "Installing avahi-daemon"
+	apt-get -y -qq install avahi-daemon
+	
+	echo "Installing mpg321 media player"
+	apt-get -y -qq install mpg321
+	
+	echo "Installing mplayer media player"
+	apt-get -y -qq install mplayer
+    
+	echo "Installing python development tools"
+	apt-get -y -qq install python-dev
+	
+	echo "Installing audio controls"
+	apt-get -y -qq install alsa-utils
+	
+	echo "Installing xrdp for graphical remote desktop (debugging)"
+	apt-get -y -qq install xrdp
+	
+	echo "Installing apache web server and php5"
+	apt-get -y -qq install apache2 php5 libapache2-mod-php5
+	
+
+    echo "Installing hostapd and udhcpd"
+    apt-get -y -qq install hostapd # udhcpd
+    
+    echo "Copying hotspot configuration files"
+	
+#	cp ./config-files/udhcpd.conf /etc/udhcpd.conf
+#	cp ./config-files/udhcpd /etc/default
+    
+	
+    echo "Configuring interfaces"
+    cp ./config-files/interfaces /etc/network
+    
+    cp ./config-files/hostapd.conf /etc/hostapd
+    cp ./config-files/hostapd /etc/default
+
+#    cp ./config-files/sysctl.conf /etc
+	
+#	cp ./config-files/iptables.ipv4.nat /etc
+    
+#    touch /var/lib/misc/udhcpd.leases
+    
+	
+	echo "Configuring audio output"
+	modprobe snd-bcm2835
+	amixer cset numid=3 1
+	
+	echo "Updating file permissions"
+	chmod +x home/pi/audio_streaming/network_connect
+	chmod +x home/pi/audio_streaming/write_interfaces
+	echo "www-data ALL=(ALL) NOPASSWD: /sbin/ifdown wlan0, /sbin/ifup wlan0, /sbin/reboot, /home/pi/audio_streaming/write_interfaces, service hostapd restart, service hostapd stop" >> /etc/sudoers
+	
+	echo "Configuring Crontab"
+	echo '@reboot sudo /home/pi/audio_streaming/network_connect' >> /tmp/crontab.temp
+	echo '@reboot sudo python /home/pi/audio_streaming/audio_streaming.py' >> /tmp/crontab.temp
+	echo '10 * * * * bash /home/pi/audio_streaming/check_script' >> /tmp/crontab.temp
+	crontab /tmp/crontab.temp
+	
+	cp ./config-files/index.html /var/www
+	cp ./config-files/run_script.php /var/www
+
+
+    
+#    sleep 10
+#    reboot
+    
+	exit 0
+
+else
+	exit 1
+    
+fi

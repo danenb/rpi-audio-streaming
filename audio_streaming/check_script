@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [$(pidof python) > /dev/null]
+then
+	echo "audio_streaming still running"
+else
+	sudo python ~/audio_streaming/audio_streaming.py
+fi
